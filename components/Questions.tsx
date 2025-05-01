@@ -111,7 +111,6 @@ const questionsByStep: Question[][] = [
     ],
 ];
 
-// CameraModal component for webcam capture
 const CameraModal = ({
     open,
     onClose,
@@ -185,11 +184,9 @@ const Questions = () => {
     const [capturedImage, setCapturedImage] = useState<string | null>(null);
     const [cameraOpen, setCameraOpen] = useState(false);
 
-    // Memoize questions and current question
     const questions = useMemo(() => questionsByStep[currentStep] || [], [currentStep]);
     const q = useMemo(() => questions[currentQuestion], [questions, currentQuestion]);
 
-    // --- SESSION LOGIC START ---
     useEffect(() => {
         const savedAnswers = localStorage.getItem('traya_form_answers');
         if (savedAnswers) {
@@ -205,9 +202,7 @@ const Questions = () => {
     useEffect(() => {
         localStorage.setItem('traya_form_answers', JSON.stringify(answers));
     }, [answers]);
-    // --- SESSION LOGIC END ---
 
-    // Memoize handlers
     const handleChange = useCallback((id: string, value: any) => {
         dispatch(setAnswer({ id, value }));
     }, [dispatch]);
@@ -232,7 +227,6 @@ const Questions = () => {
         handleNext();
     }, [q, answers, handleNext]);
 
-    // Memoize input change handler for text fields
     const handleTextInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         if (!q) return;
         if (q.id === 'number') {
@@ -253,7 +247,6 @@ const Questions = () => {
         }
     }, [q, handleChange]);
 
-    // Memoize radio/label click handler
     const handleRadioOrLabel = useCallback((id: string, value: string) => {
         handleChange(id, value);
         setTimeout(() => {
@@ -261,7 +254,6 @@ const Questions = () => {
         }, 500);
     }, [handleChange, handleNext]);
 
-    // Memoize image upload handler
     const handleImageUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -270,7 +262,6 @@ const Questions = () => {
         }
     }, []);
 
-    // Memoize camera capture handler
     const handleCameraCapture = useCallback((dataUrl: string) => {
         setCapturedImage(dataUrl);
     }, []);
@@ -294,6 +285,7 @@ const Questions = () => {
                             />
                         </div>
                     )}
+
                     {q.type === 'radio' && (
                         <div className="flex flex-col gap-8 ml-14 mt-[-80px]">
                             {q.options?.map((opt: string, idx: number) => (
@@ -316,6 +308,7 @@ const Questions = () => {
                             ))}
                         </div>
                     )}
+
                     {q.type === 'label' && (
                         <div className="flex gap-8 mb-16 justify-center">
                             {q.options?.map((opt: string) => (
@@ -333,6 +326,7 @@ const Questions = () => {
                             ))}
                         </div>
                     )}
+
                     {q.type === 'image_upload' && (
                         <div className="flex flex-col items-center justify-center gap-8 mt-[-100px] w-full">
                             <div>
@@ -374,7 +368,7 @@ const Questions = () => {
                             </div>
                         </div>
                     )}
-                    {/* Hair Loss Stage Image Grid */}
+
                     {q.id === 'hair_loss_stage' && (
                         <div className="grid grid-cols-2 gap-6 w-full mt-[-30px]">
                             {[
@@ -413,6 +407,7 @@ const Questions = () => {
                     )}
                 </div>
             )}
+
             {(q?.id === 'name' || q?.id === 'age' || q?.id === 'number') && (
                 <div className="flex justify-center w-full px-4 ">
                     <button

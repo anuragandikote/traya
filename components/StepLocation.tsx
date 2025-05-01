@@ -21,7 +21,6 @@ const StepLocation = () => {
         } else if (!visitedSteps.includes(currentStep)) {
             setVisitedSteps(prev => [...prev, currentStep]);
         }
-        // eslint-disable-next-line
     }, [currentStep]);
 
     const visitedSet = useMemo(() => new Set(visitedSteps), [visitedSteps]);
